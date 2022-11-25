@@ -3,13 +3,16 @@ import {
   checkEffects,
   checkFills,
   checkStrokes,
-  checkType
+  checkType,
+  checkSpacing,
+  checkVisibility
   // customCheckTextFills,
   // uncomment this as an example of a custom lint function ^
 } from "./lintingFunctions";
 
 figma.showUI(__html__, { width: 360, height: 580 });
 
+let spacingArray = [0, 4, 8, 16, 24, 32];
 let borderRadiusArray = [0, 2, 4, 8, 16, 24, 32];
 let originalNodeTree: readonly any[] = [];
 let lintVectors = false;
@@ -313,9 +316,9 @@ figma.ui.onmessage = msg => {
       case "FRAME": {
         return lintFrameRules(node);
       }
-      case "SECTION": {
-        return lintSectionRules(node);
-      }
+      // case "SECTION": {
+      //   return lintSectionRules(node);
+      // }
       case "INSTANCE":
       case "RECTANGLE": {
         return lintRectangleRules(node);
@@ -356,6 +359,7 @@ figma.ui.onmessage = msg => {
     checkRadius(node, errors, borderRadiusArray);
     checkEffects(node, errors);
     checkStrokes(node, errors);
+    checkVisibility(node, errors);
 
     return errors;
   }
@@ -373,6 +377,7 @@ figma.ui.onmessage = msg => {
 
     checkStrokes(node, errors);
     checkEffects(node, errors);
+    checkVisibility(node, errors);
 
     return errors;
   }
@@ -384,20 +389,22 @@ figma.ui.onmessage = msg => {
     checkStrokes(node, errors);
     checkRadius(node, errors, borderRadiusArray);
     checkEffects(node, errors);
+    checkSpacing(node, errors, spacingArray);
+    checkVisibility(node, errors);
 
     return errors;
   }
 
-  function lintSectionRules(node) {
-    let errors = [];
+  // function lintSectionRules(node) {
+  //   let errors = [];
 
-    checkFills(node, errors);
-    // For some reason section strokes aren't accessible via the API yet.
-    // checkStrokes(node, errors);
-    checkRadius(node, errors, borderRadiusArray);
+  //   checkFills(node, errors);
+  //   // For some reason section strokes aren't accessible via the API yet.
+  //   // checkStrokes(node, errors);
+  //   checkRadius(node, errors, borderRadiusArray);
 
-    return errors;
-  }
+  //   return errors;
+  // }
 
   function lintTextRules(node) {
     let errors = [];
@@ -410,6 +417,7 @@ figma.ui.onmessage = msg => {
     // customCheckTextFills(node, errors);
     checkEffects(node, errors);
     checkStrokes(node, errors);
+    checkVisibility(node, errors);
 
     return errors;
   }
@@ -421,6 +429,7 @@ figma.ui.onmessage = msg => {
     checkRadius(node, errors, borderRadiusArray);
     checkStrokes(node, errors);
     checkEffects(node, errors);
+    checkVisibility(node, errors);
 
     return errors;
   }
@@ -433,6 +442,7 @@ figma.ui.onmessage = msg => {
       checkFills(node, errors);
       checkStrokes(node, errors);
       checkEffects(node, errors);
+      checkVisibility(node, errors);
     }
 
     return errors;
@@ -444,6 +454,7 @@ figma.ui.onmessage = msg => {
     checkFills(node, errors);
     checkStrokes(node, errors);
     checkEffects(node, errors);
+    checkVisibility(node, errors);
 
     return errors;
   }

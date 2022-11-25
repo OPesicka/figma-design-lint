@@ -53,6 +53,7 @@ export function determineFill(fills) {
 // Lint border radius
 export function checkRadius(node, errors, radiusValues) {
   let cornerType = node.cornerRadius;
+  let radiusErrors = [];
 
   if (typeof cornerType !== "symbol") {
     if (cornerType === 0) {
@@ -63,7 +64,7 @@ export function checkRadius(node, errors, radiusValues) {
   // If the radius isn't even on all sides, check each corner.
   if (typeof cornerType === "symbol") {
     if (radiusValues.indexOf(node.topLeftRadius) === -1) {
-      return errors.push(
+      radiusErrors.push(
         createErrorObject(
           node,
           "radius",
@@ -71,8 +72,9 @@ export function checkRadius(node, errors, radiusValues) {
           node.topRightRadius
         )
       );
-    } else if (radiusValues.indexOf(node.topRightRadius) === -1) {
-      return errors.push(
+    }
+    if (radiusValues.indexOf(node.topRightRadius) === -1) {
+      radiusErrors.push(
         createErrorObject(
           node,
           "radius",
@@ -80,8 +82,9 @@ export function checkRadius(node, errors, radiusValues) {
           node.topRightRadius
         )
       );
-    } else if (radiusValues.indexOf(node.bottomLeftRadius) === -1) {
-      return errors.push(
+    }
+    if (radiusValues.indexOf(node.bottomLeftRadius) === -1) {
+      radiusErrors.push(
         createErrorObject(
           node,
           "radius",
@@ -89,8 +92,9 @@ export function checkRadius(node, errors, radiusValues) {
           node.bottomLeftRadius
         )
       );
-    } else if (radiusValues.indexOf(node.bottomRightRadius) === -1) {
-      return errors.push(
+    }
+    if (radiusValues.indexOf(node.bottomRightRadius) === -1) {
+      radiusErrors.push(
         createErrorObject(
           node,
           "radius",
@@ -98,12 +102,12 @@ export function checkRadius(node, errors, radiusValues) {
           node.bottomRightRadius
         )
       );
-    } else {
-      return;
     }
-  } else {
+  }
+
+  if (typeof cornerType !== "symbol") {
     if (radiusValues.indexOf(node.cornerRadius) === -1) {
-      return errors.push(
+      radiusErrors.push(
         createErrorObject(
           node,
           "radius",
@@ -111,10 +115,10 @@ export function checkRadius(node, errors, radiusValues) {
           node.cornerRadius
         )
       );
-    } else {
-      return;
     }
   }
+
+  return errors.push(...radiusErrors);
 }
 
 // Custom Lint rule that isn't being used yet!
@@ -377,4 +381,76 @@ function RGBToHex(r, g, b) {
   if (b.length == 1) b = "0" + b;
 
   return "#" + r + g + b;
+}
+
+// Lint auto-layout spacing
+export function checkSpacing(node: FrameNode, errors, spacingValues) {
+  let spacingErrors = [];
+
+  if (spacingValues.indexOf(node.paddingTop) === -1) {
+    spacingErrors.push(
+      createErrorObject(
+        node,
+        "spacing",
+        "Incorrect Top spacing",
+        node.paddingTop + "px"
+      )
+    );
+  }
+  if (spacingValues.indexOf(node.paddingRight) === -1) {
+    spacingErrors.push(
+      createErrorObject(
+        node,
+        "spacing",
+        "Incorrect Right spacing",
+        node.paddingRight + "px"
+      )
+    );
+  }
+  if (spacingValues.indexOf(node.paddingBottom) === -1) {
+    spacingErrors.push(
+      createErrorObject(
+        node,
+        "spacing",
+        "Incorrect Bottom spacing",
+        node.paddingBottom + "px"
+      )
+    );
+  }
+  if (spacingValues.indexOf(node.paddingLeft) === -1) {
+    spacingErrors.push(
+      createErrorObject(
+        node,
+        "spacing",
+        "Incorrect Left spacing",
+        node.paddingLeft + "px"
+      )
+    );
+  }
+  if (spacingValues.indexOf(node.itemSpacing) === -1) {
+    spacingErrors.push(
+      createErrorObject(
+        node,
+        "spacing",
+        "Incorrect Item spacing",
+        node.itemSpacing + "px"
+      )
+    );
+  }
+  return errors.push(...spacingErrors);
+}
+
+export function checkVisibility(node, errors) {
+  if (node.visible === false) {
+    return errors.push(
+      createErrorObject(
+        node,
+        "visibility",
+        "Hidden layer",
+        "This is just a warning if it is intended"
+      )
+    );
+  } else {
+    return;
+  }
 }

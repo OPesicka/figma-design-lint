@@ -1,7 +1,7 @@
 import * as React from "react";
 import { motion } from "framer-motion/dist/framer-motion";
 import PanelHeader from "./PanelHeader";
-import SettingsForm from "./SettingsForm";
+// import SettingsForm from "./SettingsForm";
 import "../styles/panel.css";
 
 function SettingsPanel(props) {
@@ -57,7 +57,7 @@ function SettingsPanel(props) {
               to ignore, lock them in the Figma layer list.
             </div>
           </div>
-          <SettingsForm borderRadiusValues={props.borderRadiusValues} />
+          {/* <SettingsForm borderRadiusValues={props.borderRadiusValues} /> */}
           <div className="settings-row">
             <h3 className="settings-title">Lint Vectors (Default Off)</h3>
             <div className="settings-label">
