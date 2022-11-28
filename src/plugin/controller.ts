@@ -12,8 +12,8 @@ import {
 
 figma.showUI(__html__, { width: 360, height: 580 });
 
-let spacingArray = [0, 4, 8, 16, 24, 32];
-let borderRadiusArray = [0, 2, 4, 8, 16, 24, 32];
+let spacingArray = [0, 4, 8, 16, 24, 32, 40, 64];
+let borderRadiusArray = [0, 6, 8, 12, 100];
 let originalNodeTree: readonly any[] = [];
 let lintVectors = false;
 
@@ -190,8 +190,13 @@ figma.ui.onmessage = msg => {
 
       let children = node.children;
 
-      // Don't lint locked layers or the children/grandchildren of locked layers.
+      // If the node is an instance we skip it since the main component needs to be fixed.
+      if (node.type === "INSTANCE") {
+        return;
+      }
+
       if (lockedParentNode === undefined && node.locked === true) {
+        // Don't lint locked layers or the children/grandchildren of locked layers.
         isLayerLocked = true;
       } else if (lockedParentNode === undefined && node.locked === false) {
         isLayerLocked = false;
