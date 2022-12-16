@@ -288,16 +288,17 @@ figma.ui.onmessage = msg => {
         });
       });
 
-      figma.clientStorage.getAsync("storedRadiusValues").then(result => {
-        if (result.length) {
-          borderRadiusArray = JSON.parse(result);
+      // We don't allow for custom border radius values
+      // figma.clientStorage.getAsync("storedRadiusValues").then(result => {
+      //   if (result.length) {
+      //     borderRadiusArray = JSON.parse(result);
 
-          figma.ui.postMessage({
-            type: "fetched border radius",
-            storage: result
-          });
-        }
-      });
+      //     figma.ui.postMessage({
+      //       type: "fetched border radius",
+      //       storage: result
+      //     });
+      //   }
+      // });
     }
   }
 
@@ -321,10 +322,9 @@ figma.ui.onmessage = msg => {
       case "FRAME": {
         return lintFrameRules(node);
       }
-      case "SECTION":
-      //   {
-      //   return lintSectionRules(node);
-      // }
+      case "SECTION": {
+        return lintSectionRules(node);
+      }
       case "INSTANCE":
       case "RECTANGLE": {
         return lintRectangleRules(node);
@@ -401,16 +401,14 @@ figma.ui.onmessage = msg => {
     return errors;
   }
 
-  // function lintSectionRules(node) {
-  //   let errors = [];
+  function lintSectionRules(node) {
+    let errors = [];
 
-  //   checkFills(node, errors);
-  //   // For some reason section strokes aren't accessible via the API yet.
-  //   // checkStrokes(node, errors);
-  //   checkRadius(node, errors, borderRadiusArray);
+    // This is just a dummy rule to stop the plugin from crashing
+    checkVisibility(node, errors);
 
-  //   return errors;
-  // }
+    return errors;
+  }
 
   function lintTextRules(node) {
     let errors = [];
