@@ -321,7 +321,8 @@ figma.ui.onmessage = msg => {
       case "FRAME": {
         return lintFrameRules(node);
       }
-      // case "SECTION": {
+      case "SECTION":
+      //   {
       //   return lintSectionRules(node);
       // }
       case "INSTANCE":

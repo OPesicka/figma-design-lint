@@ -390,6 +390,10 @@ function RGBToHex(r, g, b) {
 export function checkSpacing(node: FrameNode, errors, spacingValues) {
   let spacingErrors = [];
 
+  if (node.primaryAxisAlignItems === "SPACE_BETWEEN") {
+    return;
+  }
+
   if (spacingValues.indexOf(node.paddingTop) === -1) {
     spacingErrors.push(
       createErrorObject(
